@@ -39,6 +39,3 @@ yarn-error.*
 
 # Example project
 app-example
-
-# Keys to ignore
-/constants/keys.tsx
