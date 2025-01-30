@@ -29,10 +29,16 @@ yarn-error.*
 .DS_Store
 *.pem
 
-# local env files
-.env*.local
+# Environment variables
+.env
+.env.*
+!.env.example
 
 # typescript
 *.tsbuildinfo
 
+# Example project
 app-example
+
+# Keys to ignore
+/constants/keys.tsx
