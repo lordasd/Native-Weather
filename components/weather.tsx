@@ -1,29 +1,9 @@
 import { API_KEY } from "../constants/keys";
-
-interface WeatherResponse {
-  main: {
-    temp: number;
-    temp_min: number;
-    temp_max: number;
-    humidity: number;
-  };
-  name: string;
-  sys: {
-    sunrise: number;
-    sunset: number;
-  };
-  wind: {
-    speed: number;
-  };
-  weather: Array<{
-    icon: string;
-    description: string;
-  }>;
-}
+import { WeatherResponse } from "@/types/weather";
 
 export default async function getWeather(lat: number, lon: number) {
-    const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
+    const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
     
     try {
         const [currentRes, forecastRes] = await Promise.all([
@@ -31,31 +11,21 @@ export default async function getWeather(lat: number, lon: number) {
             fetch(forecastUrl)
         ]);
 
-        if (!currentRes.ok || !forecastRes.ok) {
+        if (!currentRes.ok || !forecastRes.ok)
             throw new Error(`Weather API error: ${currentRes.status || forecastRes.status}`);
-        }
         
         const currentData: WeatherResponse = await currentRes.json();
         const forecastData = await forecastRes.json();
         
-        const tempKelvin = currentData.main?.temp;
-        const tempMinK = currentData.main?.temp_min;
-        const tempMaxK = currentData.main?.temp_max;
-        
-        if (typeof tempKelvin !== 'number') {
-            throw new Error('Invalid temperature data received');
-        }
-        
-        const tempCelsius = tempKelvin - 273.15;
+        const tempCelsius = currentData.main?.temp;
         const tempFahrenheit = tempCelsius * 9/5 + 32;
-        const minTempC = tempMinK - 273.15;
-        const maxTempC = tempMaxK - 273.15;
 
         return { 
             tempCelsius,
             tempFahrenheit,
-            minTemp: minTempC,
-            maxTemp: maxTempC,
+            feelsLike: currentData.main.feels_like,
+            minTemp: currentData.main.temp_min,
+            maxTemp: currentData.main.temp_max,
             humidity: currentData.main.humidity,
             windSpeed: currentData.wind.speed,
             locationName: currentData.name,
@@ -64,7 +34,7 @@ export default async function getWeather(lat: number, lon: number) {
             weather: currentData.weather[0],
             hourlyForecast: forecastData.list.slice(0, 8).map((item: any) => ({
                 time: new Date(item.dt * 1000),
-                temp: item.main.temp - 273.15,
+                temp: item.main.temp,
                 icon: item.weather[0].icon,
                 description: item.weather[0].description
             }))
