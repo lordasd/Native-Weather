@@ -1,6 +1,6 @@
-const formatTime = (date: Date): string => {
-    const hours = date.getHours();
-    return `${String(hours).padStart(2, '0')}:00`;
+const formatTime = (date: Date | undefined) => {
+    if (!date) return 'N/A'; // Return 'N/A' if date is undefined
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 };
 
 export default formatTime;

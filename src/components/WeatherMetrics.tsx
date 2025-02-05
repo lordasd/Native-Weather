@@ -1,14 +1,10 @@
-import { WeatherData } from '@/types/weather';
+import { WeatherData } from '@/src/types/weather';
 import { View, Text, StyleSheet} from 'react-native';
-
-const formatTime = (date: Date | undefined) => {
-    if (!date) return 'N/A'; // Return 'N/A' if date is undefined
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-};
+import formatTime from '@/src/utils/dateFormat'
 
 const WeatherMetrics = ({ weather }: { weather: WeatherData }) => {
     return (
-        <View style={styles.box}>
+        <View style={ styles.box }>
             <View style={styles.section}>
                 <Text style={styles.label}>Humidity</Text>
                 <Text style={styles.value}>{weather.humidity}%</Text>

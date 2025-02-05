@@ -47,5 +47,7 @@ export interface WeatherChartProps {
     hourlyData: Array<{
         time: Date;
         temp: number;
+        icon: string;
+        description: string;
     }>;
 }

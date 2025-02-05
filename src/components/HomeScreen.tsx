@@ -41,7 +41,7 @@ const HomeScreen = () => {
 
     if (error) {
         return (
-            <View>
+            <View style={ styles.loadingContainer }>
                 <Text style={styles.error}>{error}</Text>
             </View>
         );

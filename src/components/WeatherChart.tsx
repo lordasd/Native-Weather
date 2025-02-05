@@ -1,44 +1,41 @@
 import React from 'react';
-import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import {ScrollView, View, Text, StyleSheet, Image} from 'react-native';
 import formatTime from '../utils/dateFormat';
 import { WeatherChartProps } from "@/src/types/weather";
 
-
 export const WeatherChart: React.FC<WeatherChartProps> = ({ hourlyData }) => {
     return (
-        <View style={styles.container}>
-            <View style={styles.box}>
-                <ScrollView 
-                    horizontal 
-                    showsHorizontalScrollIndicator={true}
-                >
-                    {hourlyData.map((item, index) => (
-                        <View 
-                            key={index} 
-                            style={[
-                                styles.section,
-                                index === hourlyData.length - 1 ? { borderRightWidth: 0 } : {}
-                            ]}
-                        >
-                            <Text style={styles.timeText}>
-                                {formatTime(item.time)}
-                            </Text>
-                            <Text style={styles.tempText}>
-                                {Math.round(item.temp)}°C
-                            </Text>
-                        </View>
-                    ))}
-                </ScrollView>
-            </View>
+        <View style={styles.box}>
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={true}
+            >
+                {hourlyData.map((item, index) => (
+                    <View
+                        key={index}
+                        style={[
+                            styles.section,
+                            index === hourlyData.length - 1 ? { borderRightWidth: 0 } : {}
+                        ]}
+                    >
+                        <Text style={styles.timeText}>
+                            {formatTime(item.time)}
+                        </Text>
+                        <Image
+                            source={item.icon ? { uri: `http://openweathermap.org/img/w/${item.icon}.png` } : require('@/src/assets/images/favicon.png')}
+                            style={styles.weatherIcon}
+                        />
+                        <Text style={styles.tempText}>
+                            {Math.round(item.temp)}°C
+                        </Text>
+                    </View>
+                ))}
+            </ScrollView>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        alignItems: 'center',
-        width: '100%',
-    },
     box: {
         width: '90%',
         backgroundColor: '#fff',
@@ -49,6 +46,7 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 3,
         flexDirection: 'row',
+        marginBottom: 10,
     },
     section: {
         width: 70, // Fixed width instead of percentage
@@ -65,5 +63,9 @@ const styles = StyleSheet.create({
     tempText: {
         fontSize: 14,
         fontWeight: 'bold',
+    },
+    weatherIcon: {
+        width: 50,
+        height: 50,
     },
 });

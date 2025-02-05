@@ -1,5 +1,5 @@
 import { API_KEY } from "../constants/keys";
-import { WeatherResponse } from "@/types/weather";
+import { WeatherResponse } from "@/src/types/weather";
 
 export default async function getWeather(lat: number, lon: number) {
     const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
