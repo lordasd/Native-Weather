@@ -2,6 +2,7 @@ import { WeatherData } from '@/src/types/weather';
 import { View, Text, StyleSheet} from 'react-native';
 import formatTime from '@/src/utils/dateFormat'
 
+
 const WeatherMetrics = ({ weather }: { weather: WeatherData }) => {
     return (
         <View style={ styles.box }>

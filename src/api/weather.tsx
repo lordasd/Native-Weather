@@ -1,7 +1,8 @@
 import { API_KEY } from "../constants/keys";
 import { WeatherResponse } from "@/src/types/weather";
 
-export default async function getWeather(lat: number, lon: number) {
+
+const getWeather = async (lat: number, lon: number) => {
     const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
     const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
     
@@ -36,7 +37,8 @@ export default async function getWeather(lat: number, lon: number) {
                 time: new Date(item.dt * 1000),
                 temp: item.main.temp,
                 icon: item.weather[0].icon,
-                description: item.weather[0].description
+                description: item.weather[0].description,
+                hour: item.dt_txt.split(' ')[1].slice(0, 5),
             }))
         };
     } catch (err) {
@@ -44,3 +46,5 @@ export default async function getWeather(lat: number, lon: number) {
         throw err;
     }
 }
+
+export default getWeather;

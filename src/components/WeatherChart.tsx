@@ -3,19 +3,20 @@ import {ScrollView, View, Text, StyleSheet, Image} from 'react-native';
 import formatTime from '../utils/dateFormat';
 import { WeatherChartProps } from "@/src/types/weather";
 
-export const WeatherChart: React.FC<WeatherChartProps> = ({ hourlyData }) => {
+
+const WeatherChart = ({ hourlyForecast }: WeatherChartProps) => {
     return (
         <View style={styles.box}>
             <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={true}
             >
-                {hourlyData.map((item, index) => (
+                {hourlyForecast.map((item, index) => (
                     <View
                         key={index}
                         style={[
                             styles.section,
-                            index === hourlyData.length - 1 ? { borderRightWidth: 0 } : {}
+                            index === hourlyForecast.length - 1 ? { borderRightWidth: 0 } : {}
                         ]}
                     >
                         <Text style={styles.timeText}>
@@ -69,3 +70,5 @@ const styles = StyleSheet.create({
         height: 50,
     },
 });
+
+export default WeatherChart;

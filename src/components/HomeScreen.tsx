@@ -3,9 +3,11 @@ import { ScrollView, View, Text, StyleSheet, ActivityIndicator, Image } from 're
 import getLocation from '../utils/location';
 import getWeather from '../api/weather';
 import { WeatherData } from '@/src/types/weather';
-import { WeatherChart } from '../components/WeatherChart';
+import WeatherChart from '../components/WeatherChart';
 import WeatherMetrics from './WeatherMetrics';
-import AnimatedRefreshIcon from '../components/AnimatedRefreshIcon'; // Import the new component
+import WeatherWeekly from "@/src/components/WeatherWeekly";
+import AnimatedRefreshIcon from '../components/AnimatedRefreshIcon';
+
 
 const HomeScreen = () => {
     const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -61,7 +63,7 @@ const HomeScreen = () => {
                         />
                         <View style={styles.mainTemp}>
                             <Image
-                                source={{ uri: `http://openweathermap.org/img/w/${weather.weather.icon}.png` }}
+                                source={{ uri: `https://openweathermap.org/img/w/${weather.weather.icon}.png` }}
                                 style={styles.weatherIcon}
                             />
                             <Text style={styles.temperature}>
@@ -81,8 +83,9 @@ const HomeScreen = () => {
                             </Text>
                         </View>
 
-                        <WeatherChart hourlyData={weather.hourlyForecast} />
-                        <WeatherMetrics weather={weather} />
+                        <WeatherChart hourlyForecast={ weather.hourlyForecast } />
+                        <WeatherMetrics weather={ weather } />
+                        <WeatherWeekly hourlyForecast={ weather.hourlyForecast } />
                     </View>
                 </ScrollView>
             ) : (

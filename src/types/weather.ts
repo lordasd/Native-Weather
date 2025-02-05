@@ -40,14 +40,10 @@ export interface WeatherData {
         temp: number;
         icon: string;
         description: string;
+        hour: string;
     }>;
 }
 
 export interface WeatherChartProps {
-    hourlyData: Array<{
-        time: Date;
-        temp: number;
-        icon: string;
-        description: string;
-    }>;
+    hourlyForecast: WeatherData['hourlyForecast'];
 }
