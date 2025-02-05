@@ -1,17 +1,8 @@
 import React from 'react';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import formatTime from '../utils/dateFormat';
+import { WeatherChartProps } from "@/src/types/weather";
 
-interface WeatherChartProps {
-    hourlyData: Array<{
-        time: Date;
-        temp: number;
-    }>;
-}
-
-const formatTime = (date: Date): string => {
-    const hours = date.getHours();
-    return `${String(hours).padStart(2, '0')}:00`;
-};
 
 export const WeatherChart: React.FC<WeatherChartProps> = ({ hourlyData }) => {
     return (

@@ -1,66 +1,42 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ScrollView, View, Text, StyleSheet, ActivityIndicator, Image, TouchableOpacity, Animated, Easing } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, View, Text, StyleSheet, ActivityIndicator, Image } from 'react-native';
 import getLocation from '../utils/location';
 import getWeather from '../api/weather';
-import { WeatherData } from '@/types/weather';
+import { WeatherData } from '@/src/types/weather';
 import { WeatherChart } from '../components/WeatherChart';
 import WeatherMetrics from './WeatherMetrics';
+import AnimatedRefreshIcon from '../components/AnimatedRefreshIcon'; // Import the new component
 
 const HomeScreen = () => {
     const [weather, setWeather] = useState<WeatherData | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
-    const spinValue = useRef(new Animated.Value(0)).current;
-    
-    // Spin animation configuration
-    const spin = spinValue.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '360deg']
-    });
-
-    const startSpin = () => {
-        spinValue.setValue(0);
-        Animated.loop(
-        Animated.timing(spinValue, {
-            toValue: 1,
-            duration: 1000,
-            easing: Easing.linear,
-            useNativeDriver: true
-        })
-        ).start();
-    };
-
-    const stopSpin = () => {
-        spinValue.stopAnimation();
-    };
 
     const fetchLocationAndWeather = async () => {
         setError(null); // Reset errors
         setIsRefreshing(true); // Start loading
-        startSpin();
 
         try {
             const locationData = await getLocation();
-            
+
             if (!locationData)
                 throw new Error('Unable to get location');
-            
+
             const weatherData = await getWeather(
                 locationData.latitude,
                 locationData.longitude
             );
-            
+
             setWeather(weatherData);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An error occurred');
         } finally {
             setIsRefreshing(false); // Stop loading
-            stopSpin();
         }
     };
 
     useEffect(() => {
-        fetchLocationAndWeather();
+        void fetchLocationAndWeather();
     }, []);
 
     if (error) {
@@ -77,17 +53,14 @@ const HomeScreen = () => {
                 <ScrollView>
                     <View style={styles.weatherContainer}>
                         <Text style={styles.location}>{weather.locationName}</Text>
-                        <TouchableOpacity 
-                            onPress={fetchLocationAndWeather} 
-                            disabled={isRefreshing}
-                        >
-                            <Animated.Image
-                                style={[styles.refreshIcon, { transform: [{ rotate: spin }] }]}
-                                source={ require('@/src/assets/images/refresh-icon.png') }
-                            />
-                        </TouchableOpacity>
+                        <AnimatedRefreshIcon
+                            onPress={fetchLocationAndWeather}
+                            isSpinning={isRefreshing}
+                            source={require('@/src/assets/images/refresh-icon.png')}
+                            style={styles.refreshIcon}
+                        />
                         <View style={styles.mainTemp}>
-                            <Image 
+                            <Image
                                 source={{ uri: `http://openweathermap.org/img/w/${weather.weather.icon}.png` }}
                                 style={styles.weatherIcon}
                             />
@@ -120,7 +93,7 @@ const HomeScreen = () => {
             )}
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     weatherContainer: {

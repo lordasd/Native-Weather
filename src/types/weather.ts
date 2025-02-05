@@ -42,3 +42,10 @@ export interface WeatherData {
         description: string;
     }>;
 }
+
+export interface WeatherChartProps {
+    hourlyData: Array<{
+        time: Date;
+        temp: number;
+    }>;
+}
