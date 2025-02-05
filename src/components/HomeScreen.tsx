@@ -85,7 +85,7 @@ const HomeScreen = () => {
 
                         <WeatherChart hourlyForecast={ weather.hourlyForecast } />
                         <WeatherMetrics weather={ weather } />
-                        <WeatherWeekly hourlyForecast={ weather.hourlyForecast } />
+                        {/*<WeatherWeekly hourlyForecast={ weather.hourlyForecast } />*/}
                     </View>
                 </ScrollView>
             ) : (
