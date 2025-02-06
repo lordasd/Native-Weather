@@ -70,11 +70,10 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
             const data = await response.json();
 
             if (isMounted.current) {
-                if (data.features) {
+                if (data.features)
                     setSearchResults(data.features);
-                } else {
+                else
                     setError('No locations found');
-                }
             }
         } catch (err) {
             if (err instanceof DOMException && err.name === 'AbortError') {
@@ -89,24 +88,22 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
                 setIsSearching(false);
         }
 
-        return () => {
-            isMounted.current = false; // Prevent state update if unmounted
-        };
+        return () => isMounted.current = false; // Prevent state update if unmounted
+
     };
 
     useEffect(() => {
-        if (searchTimeout.current) {
+        if (searchTimeout.current)
             clearTimeout(searchTimeout.current);
-        }
 
         searchTimeout.current = setTimeout(() => {
             void searchLocations(searchQuery);
         }, 500); // Reduced debounce time for better responsiveness
 
         return () => {
-            if (searchTimeout.current) {
+            if (searchTimeout.current)
                 clearTimeout(searchTimeout.current);
-            }
+
             if (abortControllerRef.current) {
                 abortControllerRef.current.abort();
                 abortControllerRef.current = null;  // Reset after aborting
@@ -157,9 +154,8 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
     };
 
     const removeLocation = (name: string) => {
-        if (name !== 'My Location') {
+        if (name !== 'My Location')
             setLocations(locations.filter(loc => loc.name !== name));
-        }
     };
 
     return (
