@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 import HomeScreen from '../../../components/HomeScreen'; // your HomeScreen component
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import CustomDrawerContent from '@/src/components/CustomDrawerContent'; // see next step
+import CustomDrawerContent from '@/src/components/navigation/CustomDrawerContent'; // see next step
 
 const Drawer = createDrawerNavigator();
 

@@ -9,12 +9,12 @@ import {
 } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { WeatherData } from '@/src/types/weather';
-import WeatherChart from '@/src/components/WeatherChart';
-import WeatherMetrics from '@/src/components/WeatherMetrics';
-import WeatherWeekly from '@/src/components/WeatherWeekly';
+import WeatherChart from '@/src/components/weather/WeatherChart';
+import WeatherMetrics from '@/src/components/weather/WeatherMetrics';
+import WeatherWeekly from '@/src/components/weather/WeatherWeekly';
 import LottieView from 'lottie-react-native';
 import getWeatherAnimation from '@/src/utils/weatherAnimation';
-import CurrentWeather from './CurrentWeather';
+import CurrentWeather from './weather/CurrentWeather';
 import getLocation from '../utils/location';
 import getWeather from '../api/weather';
 import { getCoordinatesFromName } from '../utils/geocoding';

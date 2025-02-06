@@ -1,6 +1,6 @@
 import React from 'react';
 import {ScrollView, View, Text, StyleSheet, Image} from 'react-native';
-import formatTime from '../utils/dateFormat';
+import formatTime from '../../utils/dateFormat';
 import { WeatherChartProps } from "@/src/types/weather";
 
 
