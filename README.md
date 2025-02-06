@@ -17,9 +17,9 @@ A simple and intuitive weather application built with React Native and Expo.  Th
 ## Screenshots
 
 <div style="display: flex; flex-wrap: wrap; justify-content: center;"> 
-  <img src="/src/assets/images/screenshots/loading-app.png" alt="Loading Screen" width="300" style="margin: 5px;">
-  <img src="/src/assets/images/screenshots/main-screen.png" alt="Main Screen" width="300" style="margin: 5px;">
-  <img src="/src/assets/images/screenshots/add-location.png" alt="Add Location" width="300" style="margin: 5px;">
+  <img src="/src/assets/images/screenshots/loading-app.png" alt="Loading Screen" width="250" style="margin: 5px;">
+  <img src="/src/assets/images/screenshots/main-screen.png" alt="Main Screen" width="250" style="margin: 5px;">
+  <img src="/src/assets/images/screenshots/add-location.png" alt="Add Location" width="250" style="margin: 5px;">
 </div>
 
 ## Technologies
