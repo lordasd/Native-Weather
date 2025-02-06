@@ -1,10 +1,10 @@
-import { API_KEY } from "../constants/keys";
+import { WEATHERAPI_KEY } from "../constants/keys";
 import { WeatherResponse } from "@/src/types/weather";
 
 
 const getWeather = async (lat: number, lon: number) => {
-    const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+    const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${WEATHERAPI_KEY}&units=metric`;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${WEATHERAPI_KEY}&units=metric`;
     
     try {
         const [currentRes, forecastRes] = await Promise.all([
