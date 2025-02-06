@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ScrollView, View, Text, StyleSheet, ActivityIndicator, Image } from 'react-native';
+import { WeatherData } from '@/src/types/weather';
+import WeatherChart from '@/src/components/WeatherChart';
+import WeatherMetrics from '@/src/components/WeatherMetrics';
+import WeatherWeekly from "@/src/components/WeatherWeekly";
+import LottieView from 'lottie-react-native';
+import getWeatherAnimation from '@/src/utils/weatherAnimation';
+import CurrentWeather from './CurrentWeather';
 import getLocation from '../utils/location';
 import getWeather from '../api/weather';
-import { WeatherData } from '@/src/types/weather';
-import WeatherChart from '../components/WeatherChart';
-import WeatherMetrics from './WeatherMetrics';
-import WeatherWeekly from "@/src/components/WeatherWeekly";
-import AnimatedRefreshIcon from '../components/AnimatedRefreshIcon';
 
 const HomeScreen = () => {
     const [weather, setWeather] = useState<WeatherData | null>(null);
-    const [error, setError] = useState<string | null>(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const animation = useRef<LottieView>(null);
 
     const fetchLocationAndWeather = async () => {
         setError(null); // Reset errors
@@ -38,6 +41,8 @@ const HomeScreen = () => {
 
     useEffect(() => {
         void fetchLocationAndWeather();
+        // Auto-play animation on mount
+        animation.current?.play();
     }, []);
 
     if (error) {
@@ -51,42 +56,29 @@ const HomeScreen = () => {
     return (
         <View style={{ flex: 1 }}>
             {weather ? (
-                <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-                    <View style={styles.weatherContainer}>
-                        <Text style={styles.location}>{weather.locationName}</Text>
-                        <AnimatedRefreshIcon
-                            onPress={fetchLocationAndWeather}
-                            isSpinning={isRefreshing}
-                            source={require('@/src/assets/images/refresh-icon.png')}
-                            style={styles.refreshIcon}
-                        />
-                        <View style={styles.mainTemp}>
-                            <Image
-                                source={{ uri: `https://openweathermap.org/img/w/${weather.weather.icon}.png` }}
-                                style={styles.weatherIcon}
+                <>
+                    {/* Background Animation */}
+                    <LottieView
+                        autoPlay
+                        loop
+                        ref={animation}
+                        style={styles.backgroundAnimation} // Ensures it's in the background
+                        source={getWeatherAnimation(weather.weather.description)}
+                    />
+                    {/* Content Layer */}
+                    <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+                        <View style={styles.weatherContainer}>
+                            <CurrentWeather 
+                                weather={weather} 
+                                isRefreshing={isRefreshing} 
+                                fetchLocationAndWeather={fetchLocationAndWeather} 
                             />
-                            <Text style={styles.temperature}>
-                                {Math.round(weather.tempCelsius)}°C
-                            </Text>
-                            <Text>
-                                Feels like {Math.round(weather.feelsLike)}°C
-                            </Text>
-                            <Text style={styles.description}>
-                                {weather.weather.description}
-                            </Text>
+                            <WeatherChart hourlyForecast={weather.hourlyForecast} />
+                            <WeatherMetrics weather={weather} />
+                            <WeatherWeekly hourlyForecast={weather.hourlyForecast} />
                         </View>
-
-                        <View style={styles.minMax}>
-                            <Text>
-                                {Math.round(weather.maxTemp)}°C/{Math.round(weather.minTemp)}°C
-                            </Text>
-                        </View>
-
-                        <WeatherChart hourlyForecast={weather.hourlyForecast} />
-                        <WeatherMetrics weather={weather} />
-                        <WeatherWeekly hourlyForecast={weather.hourlyForecast} />
-                    </View>
-                </ScrollView>
+                    </ScrollView>
+                </>
             ) : (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="large" color="#0000ff" />
@@ -98,34 +90,18 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+    backgroundAnimation: {
+        position: 'absolute',
+        width: '100%',
+        height: '50%',
+        top: 0,
+        left: 0,
+        zIndex: 0, // Ensures animation stays behind the rest of the UI
+    },
     weatherContainer: {
         flex: 1,
         alignItems: 'center',
-    },
-    location: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    mainTemp: {
-        alignItems: 'center',
-        marginVertical: 20,
-    },
-    temperature: {
-        fontSize: 48,
-        fontWeight: 'bold',
-    },
-    description: {
-        fontSize: 18,
-        color: '#666',
-    },
-    minMax: {
-        flexDirection: 'row',
-        marginBottom: 20,
-    },
-    weatherIcon: {
-        width: 50,
-        height: 50,
+        marginTop: 20, 
     },
     loadingContainer: {
         flex: 1,
@@ -140,11 +116,6 @@ const styles = StyleSheet.create({
         color: 'red',
         fontSize: 16,
         textAlign: 'center',
-    },
-    refreshIcon: {
-        padding: 10,
-        width: 24,
-        height: 24,
     },
     scrollViewContainer: {
         flexGrow: 1, 
