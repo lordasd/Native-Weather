@@ -1,4 +1,3 @@
-// App.tsx
 import React, { useState } from 'react';
 import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 import HomeScreen from '../../../components/HomeScreen'; // your HomeScreen component

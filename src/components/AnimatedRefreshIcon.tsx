@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Animated, Easing, TouchableOpacity, ImageSourcePropType, StyleProp, ImageStyle } from 'react-native';
+
 
 interface AnimatedRefreshIconProps {
     onPress: () => void;
@@ -32,12 +33,11 @@ const AnimatedRefreshIcon = ({ onPress, isSpinning, source, style }: AnimatedRef
         spinValue.stopAnimation();
     };
 
-    React.useEffect(() => {
-        if (isSpinning) {
+    useEffect(() => {
+        if (isSpinning)
             startSpin();
-        } else {
+        else
             stopSpin();
-        }
     }, [isSpinning]);
 
     return (
