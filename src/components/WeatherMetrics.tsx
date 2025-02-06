@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
         elevation: 3,
         flexDirection: 'row',
         flexWrap: 'wrap',
+        marginBottom: 10,
     },
     section: {
         width: '50%', // 2 sections per row

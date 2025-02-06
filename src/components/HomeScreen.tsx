@@ -8,7 +8,6 @@ import WeatherMetrics from './WeatherMetrics';
 import WeatherWeekly from "@/src/components/WeatherWeekly";
 import AnimatedRefreshIcon from '../components/AnimatedRefreshIcon';
 
-
 const HomeScreen = () => {
     const [weather, setWeather] = useState<WeatherData | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -43,7 +42,7 @@ const HomeScreen = () => {
 
     if (error) {
         return (
-            <View style={ styles.loadingContainer }>
+            <View style={styles.loadingContainer}>
                 <Text style={styles.error}>{error}</Text>
             </View>
         );
@@ -52,7 +51,7 @@ const HomeScreen = () => {
     return (
         <View style={{ flex: 1 }}>
             {weather ? (
-                <ScrollView>
+                <ScrollView contentContainerStyle={styles.scrollViewContainer}>
                     <View style={styles.weatherContainer}>
                         <Text style={styles.location}>{weather.locationName}</Text>
                         <AnimatedRefreshIcon
@@ -67,10 +66,10 @@ const HomeScreen = () => {
                                 style={styles.weatherIcon}
                             />
                             <Text style={styles.temperature}>
-                                {Math.round(weather.tempCelsius)}°
+                                {Math.round(weather.tempCelsius)}°C
                             </Text>
                             <Text>
-                                Feels like {Math.round(weather.feelsLike)}°
+                                Feels like {Math.round(weather.feelsLike)}°C
                             </Text>
                             <Text style={styles.description}>
                                 {weather.weather.description}
@@ -79,13 +78,13 @@ const HomeScreen = () => {
 
                         <View style={styles.minMax}>
                             <Text>
-                                {Math.round(weather.maxTemp)}°/{Math.round(weather.minTemp)}°C
+                                {Math.round(weather.maxTemp)}°C/{Math.round(weather.minTemp)}°C
                             </Text>
                         </View>
 
-                        <WeatherChart hourlyForecast={ weather.hourlyForecast } />
-                        <WeatherMetrics weather={ weather } />
-                        {/*<WeatherWeekly hourlyForecast={ weather.hourlyForecast } />*/}
+                        <WeatherChart hourlyForecast={weather.hourlyForecast} />
+                        <WeatherMetrics weather={weather} />
+                        <WeatherWeekly hourlyForecast={weather.hourlyForecast} />
                     </View>
                 </ScrollView>
             ) : (
@@ -146,6 +145,10 @@ const styles = StyleSheet.create({
         padding: 10,
         width: 24,
         height: 24,
+    },
+    scrollViewContainer: {
+        flexGrow: 1, 
+        paddingBottom: 20,
     },
 });
 

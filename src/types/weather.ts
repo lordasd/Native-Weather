@@ -40,7 +40,7 @@ export interface WeatherData {
         temp: number;
         icon: string;
         description: string;
-        hour: string;
+        timestamp: string; // yyyy-mm-dd hh:mm:ss
     }>;
 }
 

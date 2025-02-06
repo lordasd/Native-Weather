@@ -11,7 +11,7 @@ const WeatherChart = ({ hourlyForecast }: WeatherChartProps) => {
                 horizontal
                 showsHorizontalScrollIndicator={true}
             >
-                {hourlyForecast.map((item, index) => (
+                {hourlyForecast.slice(0, 8).map((item, index) => (
                     <View
                         key={index}
                         style={[

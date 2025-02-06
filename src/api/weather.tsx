@@ -33,12 +33,12 @@ const getWeather = async (lat: number, lon: number) => {
             sunrise: new Date(currentData.sys.sunrise * 1000),
             sunset: new Date(currentData.sys.sunset * 1000),
             weather: currentData.weather[0],
-            hourlyForecast: forecastData.list.slice(0, 8).map((item: any) => ({
+            hourlyForecast: forecastData.list.map((item: any) => ({
                 time: new Date(item.dt * 1000),
                 temp: item.main.temp,
                 icon: item.weather[0].icon,
                 description: item.weather[0].description,
-                hour: item.dt_txt.split(' ')[1].slice(0, 5),
+                timestamp: item.dt_txt,
             }))
         };
     } catch (err) {
