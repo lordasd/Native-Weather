@@ -15,7 +15,7 @@ import {
     DrawerContentScrollView,
     DrawerItemList,
 } from '@react-navigation/drawer';
-import { Location } from '@/src/app/(tabs)/(home)/index';
+import { Location } from '@/src/app/(tabs)/(home)';
 import { GEOAPIFY_KEY } from '@/src/constants/keys';
 
 type CustomDrawerContentProps = DrawerContentComponentProps & {
@@ -211,7 +211,7 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
                             <FlatList
                                 style={styles.dropdown}
                                 data={searchResults}
-                                keyExtractor={(item, index) => index.toString()}
+                                keyExtractor={(_item, index) => index.toString()}
                                 keyboardShouldPersistTaps="handled"
                                 renderItem={({ item }) => (
                                     <TouchableOpacity
