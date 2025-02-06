@@ -55,33 +55,43 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
         setIsSearching(true);
         setError(null);
 
+        if (abortControllerRef.current)
+            abortControllerRef.current.abort();
+
+        const controller = new AbortController();
+        abortControllerRef.current = controller;
+        const isMounted = { current: true };
+
         try {
-            if (abortControllerRef.current) {
-                abortControllerRef.current.abort();
-            }
-
-            const controller = new AbortController();
-            abortControllerRef.current = controller;
-
             const encodedQuery = encodeURIComponent(query);
             const url = `https://api.geoapify.com/v1/geocode/search?text=${encodedQuery}&apiKey=${GEOAPIFY_KEY}&limit=5`;
 
             const response = await fetch(url, { signal: controller.signal });
             const data = await response.json();
 
-            if (data.features) {
-                setSearchResults(data.features);
-            } else {
-                setError('No locations found');
+            if (isMounted.current) {
+                if (data.features) {
+                    setSearchResults(data.features);
+                } else {
+                    setError('No locations found');
+                }
             }
         } catch (err) {
-            if (err !== 'AbortError') {
+            if (err instanceof DOMException && err.name === 'AbortError') {
+                return; // Ignore aborted request
+            }
+            if (isMounted.current) {
                 setError('Failed to search locations');
                 console.error('Search error:', err);
             }
         } finally {
-            setIsSearching(false);
+            if (isMounted.current)
+                setIsSearching(false);
         }
+
+        return () => {
+            isMounted.current = false; // Prevent state update if unmounted
+        };
     };
 
     useEffect(() => {
@@ -99,6 +109,7 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
             }
             if (abortControllerRef.current) {
                 abortControllerRef.current.abort();
+                abortControllerRef.current = null;  // Reset after aborting
             }
         };
     }, [searchQuery]);
@@ -132,9 +143,8 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
             if (!locations.some(loc => loc.name === newLoc.name)) {
                 setLocations([...locations, newLoc]);
                 resetModal();
-            } else {
+            } else
                 setError('This location is already in your list');
-            }
         }
     };
 
