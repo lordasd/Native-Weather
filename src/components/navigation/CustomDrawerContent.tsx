@@ -16,7 +16,7 @@ import {
     DrawerItemList,
 } from '@react-navigation/drawer';
 import { Location } from '@/src/app/(tabs)/(home)/index';
-import { GEOAPIFY_KEY } from '../constants/keys';
+import { GEOAPIFY_KEY } from '@/src/constants/keys';
 
 type CustomDrawerContentProps = DrawerContentComponentProps & {
     locations: Location[];
