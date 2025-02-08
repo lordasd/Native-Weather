@@ -1,0 +1,44 @@
+# Node.js dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build output
+/dist
+/build
+
+# Dependency directories
+jspm_packages/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE directories
+.vscode/
+.idea/
+
+# npm package lock files (optional, depending on your workflow)
+package-lock.json
+yarn.lock
+
+# Coverage reports (if you use a test framework like Mocha, Jest, etc.)
+coverage/
+
+# PM2 runtime (if using PM2 to manage processes)
+pids/
+*.pid
+*.seed
+
+# Parmeters and API keys
+.env

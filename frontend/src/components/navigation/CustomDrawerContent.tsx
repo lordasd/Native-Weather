@@ -16,22 +16,11 @@ import {
     DrawerItemList,
 } from '@react-navigation/drawer';
 import { Location } from '@/src/app/(tabs)/(home)';
-import { GEOAPIFY_KEY } from '@/src/constants/keys';
+import { geocodingService, GeocodingFeature } from '@/src/api/geocoding';
 
 type CustomDrawerContentProps = DrawerContentComponentProps & {
     locations: Location[];
     setLocations: React.Dispatch<React.SetStateAction<Location[]>>;
-};
-
-type Feature = {
-    properties: {
-        formatted: string;
-        name: string;
-        country: string;
-        state?: string;
-        city?: string;
-        [key: string]: any;
-    };
 };
 
 const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
@@ -39,7 +28,7 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedLocation, setSelectedLocation] = useState('');
-    const [searchResults, setSearchResults] = useState<Feature[]>([]);
+    const [searchResults, setSearchResults] = useState<GeocodingFeature[]>([]);
     const [isSearching, setIsSearching] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -55,25 +44,18 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
         setIsSearching(true);
         setError(null);
 
-        if (abortControllerRef.current)
+        if (abortControllerRef.current) {
             abortControllerRef.current.abort();
+        }
 
         const controller = new AbortController();
         abortControllerRef.current = controller;
         const isMounted = { current: true };
 
         try {
-            const encodedQuery = encodeURIComponent(query);
-            const url = `https://api.geoapify.com/v1/geocode/search?text=${encodedQuery}&apiKey=${GEOAPIFY_KEY}&limit=5`;
-
-            const response = await fetch(url, { signal: controller.signal });
-            const data = await response.json();
-
+            const features = await geocodingService.searchLocations(query);
             if (isMounted.current) {
-                if (data.features)
-                    setSearchResults(data.features);
-                else
-                    setError('No locations found');
+                setSearchResults(features);
             }
         } catch (err) {
             if (err instanceof DOMException && err.name === 'AbortError') {
@@ -84,25 +66,29 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
                 console.error('Search error:', err);
             }
         } finally {
-            if (isMounted.current)
+            if (isMounted.current) {
                 setIsSearching(false);
+            }
         }
 
-        return () => isMounted.current = false; // Prevent state update if unmounted
-
+        return () => {
+            isMounted.current = false;
+        };
     };
 
     useEffect(() => {
-        if (searchTimeout.current)
+        if (searchTimeout.current) {
             clearTimeout(searchTimeout.current);
+        }
 
         searchTimeout.current = setTimeout(() => {
             void searchLocations(searchQuery);
         }, 500); // Reduced debounce time for better responsiveness
 
         return () => {
-            if (searchTimeout.current)
+            if (searchTimeout.current) {
                 clearTimeout(searchTimeout.current);
+            }
 
             if (abortControllerRef.current) {
                 abortControllerRef.current.abort();
@@ -111,7 +97,7 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
         };
     }, [searchQuery]);
 
-    const formatLocationName = (feature: Feature): string => {
+    const formatLocationName = (feature: GeocodingFeature): string => {
         const { name, city, state, country } = feature.properties;
         const parts = [name];
 
@@ -122,7 +108,7 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
         return parts.join(', ');
     };
 
-    const handleSuggestionPress = (feature: Feature) => {
+    const handleSuggestionPress = (feature: GeocodingFeature) => {
         const formattedLocation = formatLocationName(feature);
         setSelectedLocation(formattedLocation);
         setSearchQuery(formattedLocation);
@@ -140,8 +126,9 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
             if (!locations.some(loc => loc.name === newLoc.name)) {
                 setLocations([...locations, newLoc]);
                 resetModal();
-            } else
+            } else {
                 setError('This location is already in your list');
+            }
         }
     };
 
@@ -154,8 +141,9 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = (props) => {
     };
 
     const removeLocation = (name: string) => {
-        if (name !== 'My Location')
+        if (name !== 'My Location') {
             setLocations(locations.filter(loc => loc.name !== name));
+        }
     };
 
     return (

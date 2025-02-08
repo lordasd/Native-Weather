@@ -1,12 +1,5 @@
 import 'dotenv/config';
 
-if (!process.env.WEATHERAPI_KEY ) {
-    throw new Error('WEATHERAPI_KEY is missing from .env file');
-}
-if (!process.env.GEOAPIFY_KEY ) {
-    throw new Error('GEOAPIFY_KEY is missing from .env file');
-}
-
 export default {
     expo: {
         name: "native-demo",
@@ -47,8 +40,7 @@ export default {
             typedRoutes: true
         },
         extra: {
-            weatherApiKey: process.env.WEATHERAPI_KEY,
-            geoApifyKey: process.env.GEOAPIFY_KEY,
+            API_BASE_URL: process.env.API_BASE_URL,
         },
     }
 };

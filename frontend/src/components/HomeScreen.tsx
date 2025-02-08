@@ -16,7 +16,7 @@ import getWeatherAnimation from '@/src/utils/weatherAnimation';
 import CurrentWeather from './weather/CurrentWeather';
 import getLocation from '../utils/location';
 import getWeather from '../api/weather';
-import {getCoordinatesFromName} from '../utils/geocoding';
+import { geocodingService } from '@/src/api/geocoding';
 
 
 type HomeScreenRouteParams = {
@@ -55,7 +55,7 @@ const HomeScreen = () => {
         try {
             if (address) {
                 // Geocode the address to get coordinates
-                const {latitude, longitude} = await getCoordinatesFromName(address);
+                const {latitude, longitude} = await geocodingService.getCoordinates(address);
                 await fetchWeather(latitude, longitude);
             } else {
                 // Use the current device location
