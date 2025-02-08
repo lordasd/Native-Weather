@@ -39,5 +39,8 @@ export default {
         experiments: {
             typedRoutes: true
         },
+        extra: {
+            API_BASE_URL: process.env.API_BASE_URL,
+        },
     }
 };

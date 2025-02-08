@@ -1,5 +1,11 @@
+// src/api/weather.ts
+
+import Constants from 'expo-constants';
+
+const { API_BASE_URL } = Constants.expoConfig?.extra || {};
+
 const getWeather = async (lat: number, lon: number) => {
-    const backendUrl = `http://192.168.32.191:5000/api/weather?lat=${lat}&lon=${lon}`;
+    const backendUrl = `${API_BASE_URL}/weather?lat=${lat}&lon=${lon}`;
 
     try {
         const response = await fetch(backendUrl);

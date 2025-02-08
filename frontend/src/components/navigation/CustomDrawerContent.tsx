@@ -16,7 +16,7 @@ import {
     DrawerItemList,
 } from '@react-navigation/drawer';
 import { Location } from '@/src/app/(tabs)/(home)';
-import { geocodingService, GeocodingFeature } from '@/src/utils/geocoding';
+import { geocodingService, GeocodingFeature } from '@/src/api/geocoding';
 
 type CustomDrawerContentProps = DrawerContentComponentProps & {
     locations: Location[];

@@ -1,4 +1,7 @@
-// src/utils/geocoding.ts
+// src/api/geocoding.ts
+
+import Constants from 'expo-constants';
+
 export type GeocodingFeature = {
     properties: {
         formatted: string;
@@ -21,6 +24,9 @@ export type GeocodingResult = {
     state?: string;
 };
 
+
+const { API_BASE_URL } = Constants.expoConfig?.extra || {};
+
 export const geocodingService = {
     // Search for locations with autocomplete
     searchLocations: async (query: string, limit: number = 5): Promise<GeocodingFeature[]> => {
@@ -29,7 +35,7 @@ export const geocodingService = {
         }
 
         try {
-            const response = await fetch(`http://192.168.32.191:5000/api/search?query=${encodeURIComponent(query)}&limit=${limit}`);
+            const response = await fetch(`${API_BASE_URL}/search?query=${encodeURIComponent(query)}&limit=${limit}`);
             
             if (!response.ok) {
                 throw new Error('Failed to fetch locations');

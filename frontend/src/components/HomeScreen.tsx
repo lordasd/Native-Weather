@@ -16,7 +16,7 @@ import getWeatherAnimation from '@/src/utils/weatherAnimation';
 import CurrentWeather from './weather/CurrentWeather';
 import getLocation from '../utils/location';
 import getWeather from '../api/weather';
-import { geocodingService } from '../utils/geocoding';
+import { geocodingService } from '@/src/api/geocoding';
 
 
 type HomeScreenRouteParams = {
