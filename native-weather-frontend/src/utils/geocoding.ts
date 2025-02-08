@@ -1,8 +1,18 @@
 // src/utils/geocoding.ts
-import {GEOAPIFY_KEY} from "../constants/keys";
+export type GeocodingFeature = {
+    properties: {
+        formatted: string;
+        name: string;
+        country: string;
+        state?: string;
+        city?: string;
+        lat: number;
+        lon: number;
+        [key: string]: any;
+    };
+};
 
-
-type GeocodingResult = {
+export type GeocodingResult = {
     latitude: number;
     longitude: number;
     formatted: string;
@@ -11,22 +21,36 @@ type GeocodingResult = {
     state?: string;
 };
 
-export const getCoordinatesFromName = async (address: string): Promise<GeocodingResult> => {
-    try {
-        const encodedAddress = encodeURIComponent(address);
-        const url = `https://api.geoapify.com/v1/geocode/search?text=${encodedAddress}&apiKey=${GEOAPIFY_KEY}&limit=1`;
+export const geocodingService = {
+    // Search for locations with autocomplete
+    searchLocations: async (query: string, limit: number = 5): Promise<GeocodingFeature[]> => {
+        if (query.trim().length < 2) {
+            return [];
+        }
 
-        const response = await fetch(url);
+        try {
+            const response = await fetch(`http://192.168.32.191:5000/api/search?query=${encodeURIComponent(query)}&limit=${limit}`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch locations');
+            }
 
-        if (!response.ok)
-            throw new Error(`Geocoding failed: ${response.statusText}`);
+            const data = await response.json();
+            return data.features || [];
+        } catch (error) {
+            console.error('Error searching locations:', error);
+            throw new Error('Failed to search locations');
+        }
+    },
 
-        const data = await response.json();
+    getCoordinates: async (address: string): Promise<GeocodingResult> => {
+        const features = await geocodingService.searchLocations(address, 1);
 
-        if (!data.features || data.features.length === 0)
+        if (features.length === 0) {
             throw new Error('No location found');
+        }
 
-        const {lat, lon, formatted, country, city, state} = data.features[0].properties;
+        const { lat, lon, formatted, country, city, state } = features[0].properties;
 
         return {
             latitude: lat,
@@ -36,10 +60,5 @@ export const getCoordinatesFromName = async (address: string): Promise<Geocoding
             city,
             state
         };
-    } catch (error) {
-        if (error instanceof Error) {
-            throw error;
-        }
-        throw new Error('Failed to geocode address');
     }
 };

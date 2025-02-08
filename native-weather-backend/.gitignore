@@ -39,3 +39,6 @@ coverage/
 pids/
 *.pid
 *.seed
+
+# Parmeters and API keys
+.env
