@@ -121,9 +121,9 @@ The backend handles all external API requests and stores sensitive API keys. It 
 ## Screenshots
 
 <div style="display: flex; flex-wrap: wrap; justify-content: center;"> 
-  <img src="/src/assets/images/screenshots/loading-app.png" alt="Loading Screen" width="250" style="margin: 5px;">
-  <img src="/src/assets/images/screenshots/main-screen.png" alt="Main Screen" width="250" style="margin: 5px;">
-  <img src="/src/assets/images/screenshots/add-location.png" alt="Add Location" width="250" style="margin: 5px;">
+  <img src="/frontend/src/assets/images/screenshots/loading-app.png" alt="Loading Screen" width="250" style="margin: 5px;">
+  <img src="/frontend/src/assets/images/screenshots/main-screen.png" alt="Main Screen" width="250" style="margin: 5px;">
+  <img src="/frontend/src/assets/images/screenshots/add-location.png" alt="Add Location" width="250" style="margin: 5px;">
 </div>
 
 ## Contributing
