@@ -43,11 +43,7 @@ This project consists of two main components:
    ```bash
    npm install  # or yarn install
    ```
-
-Below is an updated version of your README section with clearer instructions and consistency between the setup and the code that loads the environment variable.
-
----
-
+   
 ### 4. Set Up Your API Base URL
 
 To allow your app to communicate with the backend server, follow these steps to configure the API Base URL:
