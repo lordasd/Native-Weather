@@ -44,20 +44,61 @@ This project consists of two main components:
    npm install  # or yarn install
    ```
 
-4. **Create a `.env` file with your API Base URL:**
+Below is an updated version of your README section with clearer instructions and consistency between the setup and the code that loads the environment variable.
 
-   In the frontend directory, create a file named `.env` and add the following line:
+---
+
+### 4. Set Up Your API Base URL
+
+To allow your app to communicate with the backend server, follow these steps to configure the API Base URL:
+
+1. **Create a `.env` File**
+
+   In your frontend directory, create a file named `.env` and add the following line:
+
    ```env
    API_BASE_URL=http://YOUR_LOCAL_IP:5000/api
    ```
-   Replace `YOUR_LOCAL_IP` with your actual local machine’s IP address. (You can find it by running `ipconfig` on Windows or `ifconfig` on macOS/Linux.) This configuration allows your app to fetch data from your backend server. Each developer will need to update this value until a production server is deployed.
+
+   Replace `YOUR_LOCAL_IP` with your actual machine’s IP address.  
+   - **Windows:** Run `ipconfig` in the Command Prompt.
+   - **macOS/Linux:** Run `ifconfig` in the Terminal.
 
    > **Note:**  
-   > To use environment variables in your Expo app, consider using a Babel plugin like `react-native-dotenv` or configure your `app.config.js`/`app.config.ts` to load these values. For example, you might import your variable like:
-   > ```js
-   > import { API_BASE_URL } from '@env';
-   > ```
-   > Make sure to follow the plugin’s setup instructions if you choose this method.
+   > Each developer must update this value in their own `.env` file until a production server is deployed.
+
+2. **Configure Expo to Load Environment Variables**
+
+   This project uses Expo’s configuration system to pass environment variables to your app. In your `app.config.js` (or `app.config.ts`), load the variables from the `.env` file using the `dotenv` package and add them to the `extra` field:
+
+   ```js
+   // app.config.js
+   import 'dotenv/config';
+
+   export default {
+     expo: {
+       name: 'YourAppName',
+       slug: 'your-app-slug',
+       // ...other Expo configuration options
+       extra: {
+         API_BASE_URL: process.env.API_BASE_URL,
+       },
+     },
+   };
+   ```
+
+3. **Access the API Base URL in Your Code**
+
+   In your application code, import Expo’s `Constants` to retrieve the `API_BASE_URL` from the configuration:
+
+   ```js
+   import Constants from 'expo-constants';
+
+   const { API_BASE_URL } = Constants.expoConfig?.extra || {};
+   console.log('API Base URL:', API_BASE_URL);
+   ```
+
+   This approach ensures that your app uses the correct API endpoint based on the environment configuration.
 
 5. **Start the development server:**
    ```bash
